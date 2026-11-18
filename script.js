@@ -1,6 +1,15 @@
 const $=s=>document.querySelector(s);
 let state;
-try{state=JSON.parse(localStorage.getItem("omanTogether_v1")||"null")||{};}catch(e){state={};}
+// V6 uses an isolated storage key. On first visit, it copies the V5 progress once
+// so testing the development site cannot overwrite the original V5 progress.
+const STORAGE_KEY="omanTogether_v6";
+const LEGACY_STORAGE_KEY="omanTogether_v1";
+try{
+ const savedV6=localStorage.getItem(STORAGE_KEY);
+ const savedV5=localStorage.getItem(LEGACY_STORAGE_KEY);
+ state=JSON.parse(savedV6||savedV5||"null")||{};
+ if(!savedV6&&savedV5)localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+}catch(e){state={};}
 // حافظ على بيانات الإصدارات السابقة وأضف الحقول الجديدة عند الحاجة.
 state=Object.assign({points:0,done:[],messages:[],name:"",visitedGov:[],routeDone:[],avatar:"🧭",avatarName:"المستكشف"},state);
 state.done=Array.isArray(state.done)?state.done:[];
@@ -8,7 +17,7 @@ state.messages=Array.isArray(state.messages)?state.messages:[];
 state.visitedGov=Array.isArray(state.visitedGov)?state.visitedGov:[];
 state.routeDone=Array.isArray(state.routeDone)?state.routeDone:[];
 state.avatar=state.avatar||"🧭";state.avatarName=state.avatarName||"المستكشف";
-const save=()=>{localStorage.setItem("omanTogether_v1",JSON.stringify(state));renderProgress()};
+const save=()=>{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderProgress()};
 const ar=n=>new Intl.NumberFormat("ar").format(n);
 const modal=$("#modal"),content=$("#modalContent");
 function openModal(html){content.innerHTML=html;modal.classList.add("show");modal.setAttribute("aria-hidden","false")}
@@ -136,3 +145,42 @@ renderGovernorates=function(){originalRenderGovernorates();renderTreasureBag()};
 const originalRenderExplorerRoute=renderExplorerRoute;
 renderExplorerRoute=function(){originalRenderExplorerRoute();renderTreasureBag()};
 renderTreasureBag();
+
+
+// V6: خريطة جغرافية تفاعلية بمواقع تمثيلية للمحافظات الإحدى عشرة.
+// الإحداثيات المرجعية من مجموعة Open Admin Data (CC BY 4.0)، وليست مضلعات حدود إدارية.
+function initOmanGeographicMap(){
+ const el=document.getElementById("realOmanMap");
+ if(!el)return;
+ if(!window.L){el.innerHTML='<div class="map-load-fallback">تعذر تحميل الخريطة الآن. يمكنك اختيار المحافظة من البطاقات أدناه.</div>';return;}
+ const points=[
+  [23.25,58.76],      // مسقط
+  [18.86,54.557],     // ظفار
+  [25.997,56.298],    // مسندم
+  [24.292,56.045],    // البريمي
+  [22.388,57.224],    // الداخلية
+  [24.235,56.574],    // شمال الباطنة
+  [23.483,57.649],    // جنوب الباطنة
+  [21.722,58.547],    // شمال الشرقية
+  [22.116,59.521],    // جنوب الشرقية
+  [23.005,55.988],    // الظاهرة
+  [20.476,56.904]     // الوسطى
+ ];
+ const map=L.map(el,{scrollWheelZoom:false,zoomControl:true}).setView([22.1,57.1],5.5);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:18,
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+ }).addTo(map);
+ const bounds=[];
+ governorates.forEach((g,i)=>{
+  const point=points[i];bounds.push(point);
+  const icon=L.divIcon({className:'oman-gov-marker-wrap',html:`<div class="oman-gov-marker"><span>${g.icon}</span></div>`,iconSize:[36,36],iconAnchor:[18,32]});
+  const marker=L.marker(point,{icon,keyboard:true,title:g.name,alt:g.name}).addTo(map);
+  marker.bindTooltip(g.name,{permanent:true,direction:'top',offset:[0,-23],className:'oman-map-label'});
+  marker.on('click',()=>openGovernorate(i));
+ });
+ map.fitBounds(bounds,{padding:[35,35]});
+ setTimeout(()=>map.invalidateSize(),250);
+ window.addEventListener('resize',()=>map.invalidateSize());
+}
+initOmanGeographicMap();

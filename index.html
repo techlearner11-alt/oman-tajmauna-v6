@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi+Ink&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -55,12 +56,13 @@
 
 
 <section class="section map-section" id="oman-map">
- <div class="section-heading"><div><span class="eyebrow dark">بوابة المحافظات</span><h2>اكتشف عُمان محافظةً محافظة</h2></div><p>اختر أي محافظة لفتح بوابتها والتعرّف على ملامحها. هذا مخطط تفاعلي استكشافي مبسط، وليس خريطة حدودية بمقياس جغرافي.</p></div>
+ <div class="section-heading"><div><span class="eyebrow dark">بوابة المحافظات</span><h2>اكتشف عُمان محافظةً محافظة</h2></div><p>استكشف مواقع المحافظات على خريطة جغرافية، ثم اختر أي علامة لفتح بوابتها وتحديها. تظهر العلامات مواقع تمثيلية للمحافظات وليست حدودًا إدارية تفصيلية.</p></div>
+ <div class="real-map-shell"><div class="real-map-heading"><div><b>الخريطة الجغرافية التفاعلية</b><small>اضغط على علامة المحافظة لفتح معلوماتها وتحديها</small></div><span class="map-live-key"><i></i> ١١ محافظة</span></div><div id="realOmanMap" role="application" aria-label="خريطة تفاعلية لمواقع المحافظات العمانية"></div><p class="map-source-note">الخريطة الأساسية من OpenStreetMap. مواقع العلامات تمثيلية اعتمادًا على بيانات Open Admin Data المفتوحة؛ ولا تمثل هذه العلامات الحدود الرسمية للمحافظات.</p></div>
  <div class="map-layout">
   <div class="map-intro"><div class="map-emblem">عُمان</div><h3>إحدى عشرة بوابة<br>لوطن واحد</h3><p>من الجبال إلى السواحل، ومن القلاع إلى الواحات؛ لكل محافظة حكاية تستحق الاكتشاف.</p><div class="map-count"><b id="visitedCount">٠</b><span>محافظات زرتها</span></div><div class="map-progress"><span id="mapProgress"></span></div></div>
   <div class="governorate-board" id="governorateBoard" aria-label="بوابات المحافظات العمانية"></div>
  </div>
- <p class="map-note">✦ اضغط على اسم المحافظة لفتح بطاقة الاستكشاف الخاصة بها.</p>
+ <p class="map-note">✦ يمكنك أيضًا اختيار المحافظة من البطاقات أدناه لفتح بطاقة الاستكشاف الخاصة بها.</p>
 </section>
 
 <section class="section explorer-section" id="explorer-route">
@@ -96,5 +98,6 @@
 
 <div class="modal" id="modal" aria-hidden="true"><div class="modal-card"><button class="close" id="closeModal" aria-label="إغلاق">×</button><div id="modalContent"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="script.js"></script>
 </body></html>
