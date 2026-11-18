@@ -61,3 +61,29 @@ footer{background:#24151a;color:#f5e7d0;padding:34px 24px}footer p,footer small{
 @media(max-width:650px){.real-map-shell{padding:9px;border-radius:18px;margin:18px 0 22px}#realOmanMap{height:420px;border-radius:13px}.real-map-heading{padding:4px 4px 11px}.real-map-heading b{font-size:14px}.real-map-heading small{font-size:10px}.oman-map-label{font-size:10px!important;padding:3px 6px!important}}
 
 .map-load-fallback{min-height:180px;display:grid;place-items:center;padding:24px;text-align:center;color:#6e6252;font-size:13px;line-height:2}
+
+
+/* V7 — مغامرات المحافظات: مشاهد ثنائية الأبعاد خفيفة ومصممة بـ CSS */
+.gov-scene-art{height:190px;border-radius:18px;position:relative;overflow:hidden;margin:12px 0 18px;isolation:isolate;box-shadow:inset 0 -35px 55px #1c1b1b20;border:1px solid #ffffff70}
+.gov-scene-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#ffffff08 0%,transparent 48%,#17251e28 100%);z-index:1;pointer-events:none}
+.scene-sun{position:absolute;width:72px;height:72px;border-radius:50%;top:24px;left:12%;background:linear-gradient(145deg,#fff1c7,#e6b86d);box-shadow:0 0 0 12px #fff5d01c,0 0 45px #ffe7a866}
+.scene-ridge{position:absolute;right:-5%;left:-5%;bottom:25px;height:105px;clip-path:polygon(0 100%,0 68%,13% 39%,23% 59%,38% 13%,50% 55%,64% 25%,76% 58%,88% 32%,100% 67%,100% 100%);z-index:0}
+.ridge-back{opacity:.72;transform:translateY(-13px) scaleX(1.08)}.ridge-front{height:85px;bottom:18px;opacity:.9;transform:scaleX(1.12)}
+.scene-landmark{position:absolute;z-index:2;right:50%;top:48%;transform:translate(50%,-50%);font-size:76px;line-height:1;filter:drop-shadow(0 12px 9px #26352d45);animation:sceneFloat 4s ease-in-out infinite}
+.scene-ribbon{position:absolute;z-index:3;right:14px;top:13px;padding:6px 12px;border-radius:30px;background:#fffdf0d9;color:#60452d;font-size:10px;font-weight:700;box-shadow:0 3px 12px #392b1b18}
+.scene-caption{position:absolute;z-index:3;bottom:11px;right:15px;left:15px;text-align:center;color:#fff;text-shadow:0 2px 5px #15221eaa;font-size:12px;font-weight:700;letter-spacing:.2px}
+.scene-muscat{background:linear-gradient(180deg,#d7bba0 0%,#f3d7aa 53%,#8eb2b0 54%,#477e85 100%)}.scene-muscat .ridge-back{background:#9c806c}.scene-muscat .ridge-front{background:#526f70}
+.scene-dhofar{background:linear-gradient(180deg,#c9dfc5 0%,#a8c9a5 48%,#77a68a 49%,#356b58 100%)}.scene-dhofar .ridge-back{background:#6f9d7c}.scene-dhofar .ridge-front{background:#315f4c}
+.scene-musandam{background:linear-gradient(180deg,#c8dce0 0%,#e6d8b8 55%,#75aeb5 56%,#397b88 100%)}.scene-musandam .ridge-back{background:#80979b;clip-path:polygon(0 100%,0 65%,15% 18%,27% 65%,43% 4%,58% 65%,74% 20%,88% 70%,100% 45%,100% 100%)}.scene-musandam .ridge-front{background:#526f79}
+.scene-buraimi{background:linear-gradient(180deg,#e8c99b 0%,#f3dfb8 55%,#bd9a61 56%,#98754b 100%)}.scene-buraimi .ridge-back{background:#c4a36f}.scene-buraimi .ridge-front{background:#94764d}
+.scene-dakhiliyah{background:linear-gradient(180deg,#e7c99c 0%,#f4e2c3 57%,#c5a06b 58%,#896847 100%)}.scene-dakhiliyah .ridge-back{background:#b78e5d}.scene-dakhiliyah .ridge-front{background:#775b43}
+.scene-north-batinah{background:linear-gradient(180deg,#c6dfe0 0%,#f0d8ae 52%,#79b2b4 53%,#397d88 100%)}.scene-north-batinah .ridge-back{background:#b99a79}.scene-north-batinah .ridge-front{background:#477c7c}
+.scene-south-batinah{background:linear-gradient(180deg,#e7d2a9 0%,#f3e1bb 54%,#a9b47c 55%,#55775a 100%)}.scene-south-batinah .ridge-back{background:#9b9b6c}.scene-south-batinah .ridge-front{background:#456b50}
+.scene-north-sharqiyah{background:linear-gradient(180deg,#e9c58e 0%,#f3d8a6 55%,#c89a5e 56%,#9d7042 100%)}.scene-north-sharqiyah .ridge-back{background:#d0a66b;clip-path:polygon(0 100%,0 78%,20% 30%,39% 72%,61% 18%,80% 65%,100% 30%,100% 100%)}.scene-north-sharqiyah .ridge-front{background:#a77948;clip-path:polygon(0 100%,0 70%,25% 42%,47% 72%,68% 28%,100% 64%,100% 100%)}
+.scene-south-sharqiyah{background:linear-gradient(180deg,#c5dce0 0%,#f0d8b1 52%,#7eb8bd 53%,#367c8b 100%)}.scene-south-sharqiyah .ridge-back{background:#b89a7d}.scene-south-sharqiyah .ridge-front{background:#477b83}
+.scene-dhahirah{background:linear-gradient(180deg,#dfc49b 0%,#f0dfbf 55%,#b69a70 56%,#78664c 100%)}.scene-dhahirah .ridge-back{background:#a78c69}.scene-dhahirah .ridge-front{background:#75634c}
+.scene-al-wusta{background:linear-gradient(180deg,#c7dce0 0%,#f1dfc0 52%,#8eb9b7 53%,#4c8584 100%)}.scene-al-wusta .ridge-back{background:#b7a48c}.scene-al-wusta .ridge-front{background:#557d78}
+.gov-modal-title{display:flex;justify-content:space-between;align-items:center;gap:12px}.gov-modal-title h2{margin:0;color:var(--wine);font-family:"Reem Kufi Ink";font-size:27px}.gov-modal-title p{margin:3px 0 0;color:#82786d;font-size:11px}.gov-reward{white-space:nowrap;border-radius:30px;padding:7px 11px;background:#f5ead1;color:#7b5b28;font-size:10px;font-weight:700}.gov-reward.earned{background:#e7f1e8;color:#3e7350}
+.gov-fact b{display:inline-block;color:#7c5b2e;margin-bottom:4px}.challenge-kicker{font-size:10px;color:#a17d43;margin-bottom:5px}.gov-challenge{background:#fffefa}.gov-challenge .feedback{margin-top:9px;font-size:11px;line-height:1.8;color:#6d6258;min-height:20px}
+@keyframes sceneFloat{0%,100%{transform:translate(50%,-50%)}50%{transform:translate(50%,-55%)}}
+@media(max-width:560px){.gov-scene-art{height:158px;border-radius:14px}.scene-landmark{font-size:62px}.scene-sun{width:56px;height:56px;top:20px}.gov-modal-title h2{font-size:23px}.gov-reward{font-size:9px;padding:6px 9px}.gov-challenge button{width:100%;margin:5px 0;text-align:right}}

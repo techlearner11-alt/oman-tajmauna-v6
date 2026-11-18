@@ -83,16 +83,31 @@ function renderGovernorates(){
  board.querySelectorAll("[data-gov]").forEach(b=>b.onclick=()=>openGovernorate(+b.dataset.gov));
  const count=state.visitedGov?.length||0;$("#visitedCount").textContent=ar(count);$("#mapProgress").style.width=(count/governorates.length*100)+"%";renderProgress();
 }
+// مشاهد مصغّرة مرسومة بـ CSS: خفيفة وسريعة، وتمنح كل محافظة هوية بصرية مستقلة.
+const governorateScenes=[
+ {scene:"muscat",landmark:"🏙️",caption:"العاصمة · البحر والمدينة",place:"مسقط"},
+ {scene:"dhofar",landmark:"🌿",caption:"الخريف · الجبال الخضراء",place:"ظفار"},
+ {scene:"musandam",landmark:"⛰️",caption:"الخلجان · الجبال البحرية",place:"مسندم"},
+ {scene:"buraimi",landmark:"🌴",caption:"الواحات · طرق التواصل",place:"البريمي"},
+ {scene:"dakhiliyah",landmark:"🏰",caption:"نزوى · القلاع والتراث",place:"الداخلية"},
+ {scene:"north-batinah",landmark:"⚓",caption:"صحار · الساحل والتجارة",place:"شمال الباطنة"},
+ {scene:"south-batinah",landmark:"🌴",caption:"الحصون · الواحات الساحلية",place:"جنوب الباطنة"},
+ {scene:"north-sharqiyah",landmark:"🏜️",caption:"رمال الشرقية · الواحات",place:"شمال الشرقية"},
+ {scene:"south-sharqiyah",landmark:"⛵",caption:"صور · الإرث البحري",place:"جنوب الشرقية"},
+ {scene:"dhahirah",landmark:"🧭",caption:"المواقع الأثرية · الطرق التاريخية",place:"الظاهرة"},
+ {scene:"al-wusta",landmark:"🐬",caption:"السواحل · الحياة الفطرية",place:"الوسطى"}
+];
 function openGovernorate(i){
- const g=governorates[i];state.visitedGov=state.visitedGov||[];
- openModal(`<div class="eyebrow dark">بوابة المحافظة ${ar(i+1)} من ١١</div><h2>${g.icon} ${g.name}</h2><div class="gov-fact">${g.fact}</div><div class="gov-challenge"><b>تحدي المحافظة: ${g.q}</b>${g.a.map((a,n)=>`<button data-gov-answer="${n}">${a}</button>`).join("")}<div class="feedback" id="govFeedback"></div></div>`);
+ const g=governorates[i],v=governorateScenes[i];state.visitedGov=state.visitedGov||[];
+ const alreadyVisited=state.visitedGov.includes(i);
+ openModal(`<div class="eyebrow dark">مغامرة المحافظة ${ar(i+1)} من ١١</div><div class="gov-scene-art scene-${v.scene}" role="img" aria-label="مشهد توضيحي مستوحى من محافظة ${g.name}"><span class="scene-sun" aria-hidden="true"></span><span class="scene-ridge ridge-back" aria-hidden="true"></span><span class="scene-ridge ridge-front" aria-hidden="true"></span><span class="scene-landmark" aria-hidden="true">${v.landmark}</span><span class="scene-ribbon">${g.tag}</span><span class="scene-caption">${v.caption}</span></div><div class="gov-modal-title"><div><h2>${g.icon} ${g.name}</h2><p>اكتشف الحكاية، ثم اختبر معرفتك.</p></div><span class="gov-reward ${alreadyVisited?"earned":""}">${alreadyVisited?"✓ زرتها":"+١٠ نقاط"}</span></div><div class="gov-fact"><b>حكاية المكان</b><br>${g.fact}</div><div class="gov-challenge"><div class="challenge-kicker">تحدي المحافظة</div><b>${g.q}</b>${g.a.map((a,n)=>`<button data-gov-answer="${n}" ${alreadyVisited?"disabled":""}>${a}</button>`).join("")}<div class="feedback" id="govFeedback">${alreadyVisited?"أكملت تحدي هذه المحافظة من قبل. يمكنك العودة لاكتشاف معلوماتها.":"أجب إجابة صحيحة لتحصل على ١٠ نقاط عند زيارتك الأولى."}</div></div>`);
  content.querySelectorAll("[data-gov-answer]").forEach(btn=>btn.onclick=()=>{
    if(btn.disabled)return;
    const ok=+btn.dataset.govAnswer===g.correct;
    content.querySelectorAll("[data-gov-answer]").forEach(x=>x.disabled=true);
    btn.classList.add(ok?"right":"wrong");
-   if(ok){if(!state.visitedGov.includes(i)){state.visitedGov.push(i);state.points+=10;save();renderGovernorates()}$("#govFeedback").textContent="إجابة صحيحة! أُضيفت ١٠ نقاط عند زيارتك الأولى لهذه المحافظة."}
-   else $("#govFeedback").textContent="ليست الإجابة الصحيحة. اقرأ المعلومة أعلاه ثم حاول زيارة المحافظة مجددًا لاحقًا.";
+   if(ok){if(!state.visitedGov.includes(i)){state.visitedGov.push(i);state.points+=10;save();renderGovernorates();renderTreasureBag();}$("#govFeedback").textContent="أحسنت! اكتملت مغامرتك في هذه المحافظة، وأُضيفت ١٠ نقاط إلى رصيدك."}
+   else $("#govFeedback").textContent="ليست الإجابة الصحيحة. راجع حكاية المكان، ثم عد إلى التحدي في زيارة لاحقة.";
  });
 }
 renderGovernorates();
