@@ -108,3 +108,16 @@ footer{background:#24151a;color:#f5e7d0;padding:34px 24px}footer p,footer small{
 .treasure-story-note{margin-top:12px;color:#7e766b;font-size:11px;text-align:center}
 .treasure-complete-mark{font-size:68px;text-align:center;filter:drop-shadow(0 8px 8px #9a753b35);animation:companionFloat 2.5s ease-in-out infinite}
 @media(max-width:650px){.treasure-progress{padding:13px}.treasure-filters button{font-size:11px;padding:8px 12px}.treasure-item em{font-size:8px}}
+
+
+/* V8 — أدوات النسخ الاحتياطي والاستعادة */
+.progress-tools{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 20px;padding:16px 18px;border:1px solid #e8dfd1;border-radius:16px;background:#fff}
+.progress-tools>div:first-child b,.progress-tools>div:first-child small{display:block}
+.progress-tools>div:first-child b{font-size:13px;color:#514333}
+.progress-tools>div:first-child small{margin-top:4px;font-size:11px;line-height:1.7;color:#82786b}
+.progress-tools-actions{display:flex;flex-wrap:wrap;gap:8px}
+.progress-tools-actions button{border-radius:11px;padding:10px 13px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.backup-btn{background:#214d40;color:#fff;border:1px solid #214d40}
+.restore-btn{background:#fffaf0;color:#684d25;border:1px solid #d9c69e}
+.progress-tools-actions button:hover{filter:brightness(.96);transform:translateY(-1px)}
+@media(max-width:650px){.progress-tools{align-items:stretch;flex-direction:column;padding:14px}.progress-tools-actions{display:grid;grid-template-columns:1fr 1fr}.progress-tools-actions button{font-size:11px;padding:10px 7px}}
