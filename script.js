@@ -250,3 +250,22 @@ initOmanGeographicMap();
   })
   .catch(()=>{output.textContent="—";output.title="تعذر تحميل عداد الزيارات مؤقتًا"});
 })();
+
+
+// نافذة ترحيبية لاختيار رفيق الرحلة عند أول زيارة فقط.
+(function initCompanionWelcome(){
+ if(state.companionChosen)return;
+ const choices=[
+  {avatar:"🧭",name:"المستكشف",desc:"يعشق اكتشاف الأماكن",tag:"محب المغامرة"},
+  {avatar:"🦅",name:"الصقر",desc:"يراقب التفاصيل من بعيد",tag:"عينٌ لا تفوتها التفاصيل"},
+  {avatar:"🤖",name:"الروبوت الذكي",desc:"يحل الألغاز والتحديات",tag:"خبير التحديات"}
+ ];
+ const cards=choices.map((c,i)=>`<button type="button" class="welcome-companion-choice ${state.avatar===c.avatar?"selected":""}" data-welcome-avatar="${i}"><span class="welcome-companion-icon">${c.avatar}</span><b>${c.name}</b><small>${c.desc}</small><em>${c.tag}</em></button>`).join("");
+ openModal(`<div class="companion-welcome" role="dialog" aria-modal="true" aria-labelledby="companionWelcomeTitle"><span class="welcome-sparkle" aria-hidden="true">✦</span><div class="eyebrow dark">أهلًا بك في عُمان تجمعنا</div><h2 id="companionWelcomeTitle">اختر رفيق رحلتك</h2><p>لكل رحلة حكاية، ومع رفيقك تبدأ المغامرة. من تختار ليكتشف عُمان معك؟</p><div class="welcome-companion-grid">${cards}</div><div class="welcome-footnote">يمكنك تغيير رفيقك لاحقًا من قسم «رفيق الرحلة».</div></div>`);
+ content.querySelectorAll("[data-welcome-avatar]").forEach(button=>button.addEventListener("click",()=>{
+  const choice=choices[Number(button.dataset.welcomeAvatar)];
+  if(!choice)return;
+  state.avatar=choice.avatar;state.avatarName=choice.name;state.companionChosen=true;
+  save();renderCompanion();closeModal();toast(`أصبح ${state.avatarName} رفيق رحلتك! هيا نكتشف عُمان.`);
+ }));
+})();
