@@ -134,3 +134,10 @@ nav a:hover,.text-link:hover{color:#c62835}
  .brand-mark{width:39px;height:39px}
  .brand-letter{font-size:20px}
 }
+
+
+/* تثبيت لون اسم المبادرة في الشريط العلوي */
+.topbar .brand,
+.topbar .brand:visited,
+.topbar .brand b,
+.topbar .brand:hover b{color:#176447!important}
