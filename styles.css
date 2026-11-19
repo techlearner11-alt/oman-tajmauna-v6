@@ -108,3 +108,29 @@ footer{background:#24151a;color:#f5e7d0;padding:34px 24px}footer p,footer small{
 .treasure-story-note{margin-top:12px;color:#7e766b;font-size:11px;text-align:center}
 .treasure-complete-mark{font-size:68px;text-align:center;filter:drop-shadow(0 8px 8px #9a753b35);animation:companionFloat 2.5s ease-in-out infinite}
 @media(max-width:650px){.treasure-progress{padding:13px}.treasure-filters button{font-size:11px;padding:8px 12px}.treasure-item em{font-size:8px}}
+
+
+/* الهوية الوطنية: الأخضر العُماني أساسًا، والأحمر والأبيض والذهبي لمسات متوازنة */
+:root{--wine:#176447;--wine2:#c62835;--green:#176447}
+.section-heading h2,.section h2,.modal h2,.gov-modal-title h2{color:#176447}
+.stats-strip b,.overall-progress-head b{color:#176447}
+.brand-mark{position:relative;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#fff 0 48%,#f8f4e9 49% 100%);border:2px solid #c9a45e;box-shadow:inset 0 0 0 3px #fff}
+.brand-letter{position:relative;z-index:2;font-family:"Reem Kufi Ink";font-size:22px;color:#176447;line-height:1}
+.brand-flag{position:absolute;top:5px;left:6px;width:13px;height:10px;display:flex;flex-direction:column;overflow:hidden;border-radius:1px;transform:rotate(-12deg);box-shadow:0 1px 2px #0002}
+.brand-flag i{display:block;flex:1}
+.brand-flag i:nth-child(1){background:#fff}
+.brand-flag i:nth-child(2){background:#d22630}
+.brand-flag i:nth-child(3){background:#00843d}
+.visitor-counter{display:flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid #d9e7df;border-radius:24px;background:#f4faf6;color:#176447;font-size:12px;white-space:nowrap;min-height:36px}
+.visitor-icon{font-size:14px}
+.visitor-counter b{font-size:14px;color:#176447;font-variant-numeric:tabular-nums;min-width:22px;text-align:center}
+.burgundy{border-top-color:#176447}
+.card-btn,.brand,.menu-btn{color:#176447}
+nav a:hover,.text-link:hover{color:#c62835}
+@media(max-width:760px){
+ .visitor-counter{padding:5px 8px;gap:4px;font-size:10px;min-height:32px}
+ .visitor-counter b{font-size:12px;min-width:18px}
+ .visitor-icon{font-size:12px}
+ .brand-mark{width:39px;height:39px}
+ .brand-letter{font-size:20px}
+}
