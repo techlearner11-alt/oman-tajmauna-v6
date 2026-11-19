@@ -280,3 +280,9 @@ nav a:hover,.text-link:hover{color:#c62835}
 .idea-art svg path,.idea-art svg circle{vector-effect:non-scaling-stroke}
 @media(max-width:600px){.idea-art{height:132px;margin:-19px -17px 16px}}
 @media(prefers-reduced-motion:reduce){.idea-art svg{transition:none}}
+
+/* إبراز لمحة المحافظة في بداية نافذة الاستكشاف */
+.gov-fact-featured{margin:10px 0 14px;padding:15px 16px;background:linear-gradient(135deg,#f7f1e5,#fffaf0);border:1px solid #e7d8b8;border-right:4px solid #b58a4e;border-radius:12px;color:#514638;font-size:13px;line-height:1.95;}
+.gov-fact-featured b{display:block;color:#795a2d;font-size:12px;margin:0 0 5px;}
+.gov-fact-featured span{display:block;}
+@media(max-width:560px){.gov-fact-featured{margin:9px 0 12px;padding:12px 13px;font-size:12px;line-height:1.9;}}
