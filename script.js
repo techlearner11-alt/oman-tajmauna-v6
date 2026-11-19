@@ -229,3 +229,54 @@ function initOmanGeographicMap(){
  window.addEventListener('resize',()=>map.invalidateSize());
 }
 initOmanGeographicMap();
+
+
+// V8 — نسخة احتياطية محمولة لإنجازات المشارك (دون خادم أو حساب).
+(()=>{
+ const exportBtn=$("#backupProgressBtn"),restoreBtn=$("#restoreProgressBtn"),fileInput=$("#restoreProgressFile");
+ if(!exportBtn||!restoreBtn||!fileInput)return;
+ const allowedDone=["quiz","explore","code","message"];
+ const allowedAvatars={"🧭":"المستكشف","🦅":"الصقر","🤖":"الروبوت الذكي"};
+ exportBtn.addEventListener("click",()=>{
+  const payload={
+   app:"oman-tajmauna-v6",formatVersion:1,exportedAt:new Date().toISOString(),
+   progress:{
+    points:state.points,done:state.done,messages:state.messages,name:state.name||"",
+    visitedGov:state.visitedGov,routeDone:state.routeDone,avatar:state.avatar,
+    avatarName:state.avatarName,treasureCelebrated:!!state.treasureCelebrated
+   }
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="oman-tajmauna-progress-backup.json";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  toast("تم تجهيز نسخة إنجازاتك الاحتياطية.");
+ });
+ restoreBtn.addEventListener("click",()=>fileInput.click());
+ fileInput.addEventListener("change",async()=>{
+  const file=fileInput.files&&fileInput.files[0];if(!file)return;
+  try{
+   if(file.size>2*1024*1024)throw new Error("حجم الملف أكبر من الحد المسموح.");
+   const data=JSON.parse(await file.text()),p=data&&data.progress;
+   if(data.app!=="oman-tajmauna-v6"||data.formatVersion!==1||!p||typeof p!=="object")throw new Error("هذا الملف ليس نسخة احتياطية صالحة من عُمان تجمعنا.");
+   const points=Number(p.points);
+   if(!Number.isFinite(points)||points<0||points>100000)throw new Error("قيمة النقاط في الملف غير صالحة.");
+   const restored={
+    points:Math.floor(points),
+    done:[...new Set((Array.isArray(p.done)?p.done:[]).filter(x=>allowedDone.includes(x)))],
+    messages:(Array.isArray(p.messages)?p.messages:[]).slice(0,500).filter(x=>x&&typeof x.text==="string").map(x=>({name:String(x.name||"").slice(0,35),text:x.text.slice(0,300),date:typeof x.date==="string"?x.date:""})),
+    name:typeof p.name==="string"?p.name.slice(0,45):"",
+    visitedGov:[...new Set((Array.isArray(p.visitedGov)?p.visitedGov:[]).filter(x=>Number.isInteger(x)&&x>=0&&x<11))],
+    routeDone:[...new Set((Array.isArray(p.routeDone)?p.routeDone:[]).filter(x=>Number.isInteger(x)&&x>=0&&x<4))],
+    avatar:Object.prototype.hasOwnProperty.call(allowedAvatars,p.avatar)?p.avatar:"🧭",
+    avatarName:Object.prototype.hasOwnProperty.call(allowedAvatars,p.avatar)?allowedAvatars[p.avatar]:"المستكشف",
+    treasureCelebrated:!!p.treasureCelebrated
+   };
+   if(!confirm("ستُستبدل إنجازات هذا المتصفح بالنسخة الاحتياطية المختارة. هل تريد المتابعة؟"))return;
+   state=restored;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+   renderProgress();renderGovernorates();renderExplorerRoute();renderTreasureBag();renderCompanion();
+   toast("تمت استعادة رحلتك وإنجازاتك بنجاح.");
+  }catch(err){toast(err.message||"تعذر قراءة النسخة الاحتياطية.");}
+  finally{fileInput.value="";}
+ });
+})();
