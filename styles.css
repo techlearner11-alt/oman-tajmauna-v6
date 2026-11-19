@@ -183,3 +183,48 @@ nav a:hover,.text-link:hover{color:#c62835}
  #modal.show .close,#modal.show .action{display:none!important}
  #modal.show .certificate{width:100%!important;min-height:250mm;break-inside:avoid;box-shadow:none!important;margin:0 auto!important}
 }
+
+
+/* الشارة الوطنية الدائرية: ألوان العلم العُماني في إطار متوازن */
+.about-seal{
+  width:230px;height:230px;padding:10px;border:0;outline:0;
+  background:conic-gradient(from -45deg,#c62835 0 25%,#fff 25% 50%,#176447 50% 75%,#c62835 75% 100%);
+  box-shadow:0 10px 28px #273d3020, inset 0 0 0 1px #ffffffa8;
+  position:relative;isolation:isolate;
+}
+.about-seal::before{
+  content:"";position:absolute;inset:7px;border:1px solid #d6b36a;
+  border-radius:50%;pointer-events:none;
+}
+.about-seal .seal-core{
+  width:100%;height:100%;border-radius:50%;background:#fffdfa;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  box-shadow:inset 0 0 0 1px #e9dfcc;
+  padding:18px;text-align:center;
+}
+.about-seal .seal-core strong{
+  font-family:"Reem Kufi Ink",serif;font-size:39px;line-height:1.35;color:#176447;
+}
+.about-seal .seal-core small{
+  color:#655b4c;font-size:13px;font-weight:700;white-space:nowrap;
+}
+.about-seal .seal-core b{
+  margin-top:9px;padding-top:5px;border-top:1px solid #d6b36a;
+  color:#176447;font-size:15px;letter-spacing:3px;
+}
+@media(max-width:650px){
+  .about-grid{grid-template-columns:1fr;gap:30px}
+  .about-seal{width:196px;height:196px;margin-inline:auto}
+  .about-seal .seal-core strong{font-size:34px}
+  .about-seal .seal-core small{font-size:12px}
+  .modal-card.welcome-modal{width:min(100% - 24px,510px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:26px 16px 20px}
+  .welcome-companion-grid{gap:7px}
+  .welcome-companion-choice{min-height:138px;padding:11px 5px}
+  .welcome-companion-choice em{font-size:10px}
+}
+@media(max-width:380px){
+  .welcome-companion-grid{grid-template-columns:1fr;gap:8px}
+  .welcome-companion-choice{min-height:86px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;justify-items:start;text-align:right;padding:10px 13px}
+  .welcome-companion-icon{grid-row:1/3;font-size:27px}
+  .welcome-companion-choice small,.welcome-companion-choice em{grid-column:2}
+}
