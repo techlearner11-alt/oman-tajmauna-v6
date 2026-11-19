@@ -144,7 +144,7 @@ nav a:hover,.text-link:hover{color:#c62835}
 
 
 /* نافذة الترحيب واختيار رفيق الرحلة عند أول زيارة */
-.modal-card:has(.companion-welcome){max-width:510px;text-align:center;padding:34px 28px 27px;background:radial-gradient(circle at 50% 0,#fff7df 0, #fffdfa 48%);}
+.modal-card.welcome-modal{max-width:510px;text-align:center;padding:34px 28px 27px;background:radial-gradient(circle at 50% 0,#fff7df 0, #fffdfa 48%);}
 .companion-welcome{position:relative;}
 .welcome-sparkle{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 13px;border:1px solid #d6b36a;border-radius:50%;background:#fff7e6;color:#b18a43;font-size:23px;box-shadow:0 5px 18px #9c77331c;}
 .companion-welcome h2{font-size:28px!important;color:#176447!important;margin:8px 0 5px!important;}
@@ -157,4 +157,11 @@ nav a:hover,.text-link:hover{color:#c62835}
 .welcome-companion-choice small{font-size:10px;color:#77716a;line-height:1.5;}
 .welcome-companion-choice em{font-size:9px;font-style:normal;color:#9a7a43;margin-top:3px;}
 .welcome-footnote{margin-top:17px;color:#8b8175;font-size:10px;}
-@media(max-width:480px){.modal-card:has(.companion-welcome){padding:29px 14px 22px}.welcome-companion-grid{gap:6px}.welcome-companion-choice{min-height:138px;padding:10px 4px}.welcome-companion-icon{font-size:36px}.welcome-companion-choice b{font-size:11px}.welcome-companion-choice small{font-size:9px}.companion-welcome h2{font-size:24px!important}}
+@media(max-width:480px){.modal-card.welcome-modal{padding:29px 14px 22px}.welcome-companion-grid{gap:6px}.welcome-companion-choice{min-height:138px;padding:10px 4px}.welcome-companion-icon{font-size:36px}.welcome-companion-choice b{font-size:11px}.welcome-companion-choice small{font-size:9px}.companion-welcome h2{font-size:24px!important}}
+
+
+/* تحسين عرض الهاتف وإتاحة نافذة الترحيب */
+.modal-card.welcome-modal{width:min(100%,510px);max-height:min(88vh,690px);overflow-y:auto;overscroll-behavior:contain}
+.welcome-companion-choice:focus-visible{outline:3px solid #176447;outline-offset:3px}
+@media(max-width:390px){.modal-card.welcome-modal{padding:24px 11px 18px}.welcome-companion-grid{gap:5px}.welcome-companion-choice{min-height:132px}.welcome-companion-choice em{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.welcome-companion-choice{transition:none}.welcome-companion-choice:hover{transform:none}}
