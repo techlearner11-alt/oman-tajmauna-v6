@@ -140,11 +140,36 @@ const treasureItems=[
  {key:"gov0",icon:"🏛️",name:"بوابة مسقط",kind:"gov",index:0},{key:"gov1",icon:"🌿",name:"نسيم ظفار",kind:"gov",index:1},{key:"gov2",icon:"⛰️",name:"خلجان مسندم",kind:"gov",index:2},{key:"gov3",icon:"🐪",name:"واحة البريمي",kind:"gov",index:3},{key:"gov4",icon:"🏰",name:"قلعة الداخلية",kind:"gov",index:4},{key:"gov5",icon:"⚓",name:"مرسى الباطنة",kind:"gov",index:5},{key:"gov6",icon:"🏜️",name:"رمال الشرقية",kind:"gov",index:6},{key:"gov7",icon:"⛵",name:"مركب صور",kind:"gov",index:7},{key:"gov8",icon:"🧭",name:"أثر الظاهرة",kind:"gov",index:8},{key:"gov9",icon:"🧭",name:"قافلة الظاهرة",kind:"gov",index:9},{key:"gov10",icon:"🐬",name:"كنز الوسطى",kind:"gov",index:10},
  {key:"route0",icon:"🗝️",name:"مفتاح نزوى",kind:"route",index:0},{key:"route1",icon:"🍃",name:"ورقة الخريف",kind:"route",index:1},{key:"route2",icon:"⛵",name:"شراع صور",kind:"route",index:2},{key:"route3",icon:"💎",name:"جوهرة مسندم",kind:"route",index:3}
 ];
+const treasureStories={
+ gov0:"بوابة مسقط: تذكار يرمز إلى العاصمة العُمانية، حيث يلتقي عبق التاريخ بحيوية الحاضر.",
+ gov1:"نسيم ظفار: يرمز إلى خريف ظفار وأجوائها الموسمية وطبيعتها الخضراء.",
+ gov2:"خلجان مسندم: تذكار مستوحى من الخلجان البحرية والجبال المطلة على مضيق هرمز.",
+ gov3:"واحة البريمي: ترمز إلى الواحات وطرق التواصل التاريخية في شمال غرب عُمان.",
+ gov4:"قلعة الداخلية: تذكار يستحضر القلاع والحصون والحواضر التاريخية في المحافظة.",
+ gov5:"مرسى الباطنة: يرمز إلى الساحل والحركة البحرية والتجارية على امتداد الباطنة.",
+ gov6:"رمال الشرقية: تذكار يستحضر الكثبان الرملية ومشهد الصحراء العُمانية.",
+ gov7:"مركب صور: رمز للإرث البحري وصناعة السفن الخشبية التقليدية في صور.",
+ gov8:"أثر الظاهرة: تذكار يرمز إلى المواقع الأثرية والطرق التاريخية في المحافظة.",
+ gov9:"قافلة الظاهرة: تستحضر طرق التنقل والتجارة التي ربطت عُمان بمحيطها.",
+ gov10:"كنز الوسطى: يرمز إلى سواحل الوسطى وتنوع بيئاتها الطبيعية وحياتها الفطرية.",
+ route0:"مفتاح نزوى: رمز لاكتشاف أبواب التاريخ في قلعة نزوى وأسواقها العريقة.",
+ route1:"ورقة الخريف: تذكار من رحلة الطبيعة في ظفار خلال موسم الخريف.",
+ route2:"شراع صور: يستحضر مهارة البحارة وصُنّاع السفن في المدينة الساحلية.",
+ route3:"جوهرة مسندم: رمز لجمال الجبال والخلجان البحرية في أقصى شمال عُمان."
+};
+let treasureFilter="all";
 function renderTreasureBag(){
  const grid=$("#treasureGrid");if(!grid)return;
- const count=treasureItems.filter(x=>x.kind==="gov"?state.visitedGov.includes(x.index):state.routeDone.includes(x.index)).length;
+ const collected=treasureItems.filter(x=>x.kind==="gov"?state.visitedGov.includes(x.index):state.routeDone.includes(x.index));
+ const count=collected.length,govCount=state.visitedGov.length,routeCount=state.routeDone.length;
  $("#treasureCount").textContent=`${ar(count)} / ١٥`;
- grid.innerHTML=treasureItems.map(x=>{const unlocked=x.kind==="gov"?state.visitedGov.includes(x.index):state.routeDone.includes(x.index);return `<div class="treasure-item ${unlocked?"unlocked":"locked"}" title="${unlocked?x.name:"أكمل التحدي لفتح هذا الكنز"}"><span>${unlocked?x.icon:"🔒"}</span><small>${x.name}</small></div>`}).join("");
+ if($("#treasureProgress"))$("#treasureProgress").style.width=(count/15*100)+"%";
+ if($("#treasureProgressLabel"))$("#treasureProgressLabel").textContent=`اكتملت ${ar(count)} من ١٥ مقتنى`;
+ if($("#treasureCompletion"))$("#treasureCompletion").textContent=govCount===11&&routeCount===4?"اكتملت المجموعة كاملة! أنت مستكشف عُمان بكل جدارة.":govCount===11?"جمعت كنوز المحافظات الإحدى عشرة! بقيت محطات رحلة المستكشف.":`كنوز المحافظات: ${ar(govCount)} من ١١ · كنوز رحلة المستكشف: ${ar(routeCount)} من ٤`;
+ const shown=treasureItems.filter(x=>treasureFilter==="all"||(treasureFilter==="gov"&&x.kind==="gov")||(treasureFilter==="route"&&x.kind==="route"));
+ grid.innerHTML=shown.map(x=>{const unlocked=x.kind==="gov"?state.visitedGov.includes(x.index):state.routeDone.includes(x.index);return `<button type="button" class="treasure-item ${unlocked?"unlocked":"locked"}" data-treasure-key="${x.key}" aria-label="${unlocked?x.name:"كنز مقفل: "+x.name}"><span>${unlocked?x.icon:"🔒"}</span><small>${x.name}</small><em>${unlocked?"اضغط لقراءة الحكاية":"لم يُكتشف بعد"}</em></button>`}).join("");
+ document.querySelectorAll("[data-treasure-filter]").forEach(b=>{b.classList.toggle("active",b.dataset.treasureFilter===treasureFilter);b.setAttribute("aria-pressed",b.dataset.treasureFilter===treasureFilter?"true":"false");b.onclick=()=>{treasureFilter=b.dataset.treasureFilter;renderTreasureBag()}});
+ grid.querySelectorAll("[data-treasure-key]").forEach(b=>b.onclick=()=>{const item=treasureItems.find(x=>x.key===b.dataset.treasureKey);const unlocked=item&&(item.kind==="gov"?state.visitedGov.includes(item.index):state.routeDone.includes(item.index));if(!unlocked){toast("هذا الكنز ينتظرك! أكمل التحدي المرتبط به لاكتشافه.");return;}openModal(`<div class="eyebrow dark">من مقتنيات رحلتك</div><div class="treasure-story-icon">${item.icon}</div><div class="gov-modal-title"><div><h2>${item.name}</h2><p>كنز محفوظ في حقيبتك</p></div><span class="gov-reward earned">✓ مكتسب</span></div><div class="gov-fact">${treasureStories[item.key]||"تذكار من رحلتك في عُمان."}</div><p class="treasure-story-note">هذا المقتنى محفوظ على جهازك، ويمكنك العودة إليه في أي وقت.</p>`);});
 }
 function renderCompanion(){
  if($("#companionAvatar"))$("#companionAvatar").textContent=state.avatar;
