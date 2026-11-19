@@ -1,0 +1,44 @@
+name: Static quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: node --check script.js
+      - name: Check HTML IDs and internal links
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const ids = [...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(m => m[1]);
+          const seen = new Set();
+          const duplicates = ids.filter(id => seen.has(id) || !seen.add(id));
+          if (duplicates.length) {
+            console.error('Duplicate HTML IDs:', [...new Set(duplicates)].join(', '));
+            process.exit(1);
+          }
+          const known = new Set(ids);
+          const links = [...html.matchAll(/href=["']#([^"']+)["']/g)].map(m => m[1]).filter(id => id);
+          const broken = [...new Set(links.filter(id => !known.has(id)))];
+          if (broken.length) {
+            console.error('Broken in-page links:', broken.join(', '));
+            process.exit(1);
+          }
+          console.log('HTML IDs and internal links are valid.');
+          NODE
