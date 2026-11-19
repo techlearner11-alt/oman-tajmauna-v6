@@ -229,3 +229,24 @@ function initOmanGeographicMap(){
  window.addEventListener('resize',()=>map.invalidateSize());
 }
 initOmanGeographicMap();
+
+
+// عداد الزيارات العام: يزيد مرة واحدة لكل جلسة تبويب، ويقرأ القيمة دون زيادتها عند التحديث.
+(function initPublicVisitCounter(){
+ const output=document.getElementById("visitorCount");
+ if(!output)return;
+ const key="oman_tajmauna_v6_oman_together_total_visits_2026";
+ const base="https://countapi.mileshilliard.com/api/v1/";
+ let counted=false;
+ try{counted=sessionStorage.getItem("omanTogetherVisitCounted")==="1"}catch(e){}
+ const endpoint=base+(counted?"get/":"hit/")+key;
+ fetch(endpoint,{cache:"no-store"})
+  .then(response=>{if(!response.ok)throw new Error("counter unavailable");return response.json()})
+  .then(data=>{
+   const value=Number(data.value);
+   if(!Number.isFinite(value))throw new Error("invalid counter value");
+   output.textContent=new Intl.NumberFormat("ar").format(value);
+   if(!counted){try{sessionStorage.setItem("omanTogetherVisitCounted","1")}catch(e){}}
+  })
+  .catch(()=>{output.textContent="—";output.title="تعذر تحميل عداد الزيارات مؤقتًا"});
+})();
