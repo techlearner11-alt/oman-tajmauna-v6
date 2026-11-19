@@ -87,3 +87,24 @@ footer{background:#24151a;color:#f5e7d0;padding:34px 24px}footer p,footer small{
 .gov-fact b{display:inline-block;color:#7c5b2e;margin-bottom:4px}.challenge-kicker{font-size:10px;color:#a17d43;margin-bottom:5px}.gov-challenge{background:#fffefa}.gov-challenge .feedback{margin-top:9px;font-size:11px;line-height:1.8;color:#6d6258;min-height:20px}
 @keyframes sceneFloat{0%,100%{transform:translate(50%,-50%)}50%{transform:translate(50%,-55%)}}
 @media(max-width:560px){.gov-scene-art{height:158px;border-radius:14px}.scene-landmark{font-size:62px}.scene-sun{width:56px;height:56px;top:20px}.gov-modal-title h2{font-size:23px}.gov-reward{font-size:9px;padding:6px 9px}.gov-challenge button{width:100%;margin:5px 0;text-align:right}}
+
+
+/* معرض حقيبة الكنوز — تحسينات الإصدار التجريبي */
+.treasure-progress{margin:18px 0 15px;padding:16px 18px;border:1px solid #e9dfcf;border-radius:16px;background:#fffdf8}
+.treasure-progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#574a3a;font-size:13px;font-weight:700}
+.treasure-progress-head b{color:#8a6530;font-size:15px}
+.treasure-progress-track{height:9px;margin:11px 0;border-radius:20px;background:#eee8dd;overflow:hidden}
+.treasure-progress-track span{display:block;width:0;height:100%;border-radius:20px;background:linear-gradient(90deg,#8eaa83,#d2ae62);transition:width .45s ease}
+.treasure-completion{margin:7px 0 0;color:#817666;font-size:11px;line-height:1.8}
+.treasure-filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.treasure-filters button{border:1px solid #e7ddcf;border-radius:30px;padding:8px 15px;background:#fff;color:#665847;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.treasure-filters button:hover,.treasure-filters button.active{border-color:#b99552;background:#fff5df;color:#684d25}
+.treasure-item{width:100%;font:inherit;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s}
+.treasure-item:hover:not(.locked){transform:translateY(-4px);border-color:#b89554;box-shadow:0 9px 20px #5b42151a}
+.treasure-item em{font-style:normal;font-size:9px;color:#9b8f7e;line-height:1.5}
+.treasure-item.unlocked em{color:#7b633c}
+.treasure-item.locked{cursor:not-allowed}
+.treasure-story-icon{width:88px;height:88px;margin:18px auto;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#f7edda,#e7d2a6);font-size:52px}
+.treasure-story-note{margin-top:12px;color:#7e766b;font-size:11px;text-align:center}
+.treasure-complete-mark{font-size:68px;text-align:center;filter:drop-shadow(0 8px 8px #9a753b35);animation:companionFloat 2.5s ease-in-out infinite}
+@media(max-width:650px){.treasure-progress{padding:13px}.treasure-filters button{font-size:11px;padding:8px 12px}.treasure-item em{font-size:8px}}
