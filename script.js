@@ -1,5 +1,7 @@
 const $=s=>document.querySelector(s);
 let state;
+let hasSavedProgress=false;
+let storageWarningShown=false;
 // V6 uses an isolated storage key. On first visit, it copies the V5 progress once
 // so testing the development site cannot overwrite the original V5 progress.
 const STORAGE_KEY="omanTogether_v6";
@@ -7,21 +9,24 @@ const LEGACY_STORAGE_KEY="omanTogether_v1";
 try{
  const savedV6=localStorage.getItem(STORAGE_KEY);
  const savedV5=localStorage.getItem(LEGACY_STORAGE_KEY);
+ hasSavedProgress=Boolean(savedV6||savedV5);
  state=JSON.parse(savedV6||savedV5||"null")||{};
  if(!savedV6&&savedV5)localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
 }catch(e){state={};}
 // حافظ على بيانات الإصدارات السابقة وأضف الحقول الجديدة عند الحاجة.
-state=Object.assign({points:0,done:[],messages:[],name:"",visitedGov:[],routeDone:[],avatar:"🧭",avatarName:"المستكشف"},state);
+state=Object.assign({points:0,done:[],messages:[],name:"",visitedGov:[],routeDone:[],avatar:"🧭",avatarName:"المستكشف",companionChosen:hasSavedProgress},state);
+if(typeof state.companionChosen!=="boolean")state.companionChosen=hasSavedProgress;
 state.done=Array.isArray(state.done)?state.done:[];
 state.messages=Array.isArray(state.messages)?state.messages:[];
 state.visitedGov=Array.isArray(state.visitedGov)?state.visitedGov:[];
 state.routeDone=Array.isArray(state.routeDone)?state.routeDone:[];
 state.avatar=state.avatar||"🧭";state.avatarName=state.avatarName||"المستكشف";
-const save=()=>{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderProgress()};
+const save=()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){if(!storageWarningShown){storageWarningShown=true;toast("تعذر حفظ التقدم على هذا المتصفح؛ يمكنك مواصلة الرحلة، لكن قد لا تُحفظ إنجازاتك بعد إغلاق الصفحة.")}}renderProgress()};
 const ar=n=>new Intl.NumberFormat("ar").format(n);
 const modal=$("#modal"),content=$("#modalContent");
-function openModal(html){content.innerHTML=html;modal.classList.add("show");modal.setAttribute("aria-hidden","false")}
-function closeModal(){modal.classList.remove("show");modal.setAttribute("aria-hidden","true")}
+function openModal(html){content.innerHTML=html;const card=modal.querySelector(".modal-card"),welcome=content.querySelector(".companion-welcome");card.classList.toggle("welcome-modal",Boolean(welcome));if(welcome){card.setAttribute("role","dialog");card.setAttribute("aria-modal","true");card.setAttribute("aria-labelledby","companionWelcomeTitle")}else{card.removeAttribute("role");card.removeAttribute("aria-modal");card.removeAttribute("aria-labelledby")}modal.classList.add("show");modal.setAttribute("aria-hidden","false")}
+function closeModal(){if(content.querySelector(".companion-welcome")&&!state.companionChosen){state.companionChosen=true;save();renderCompanion()}modal.classList.remove("show");modal.setAttribute("aria-hidden","true")}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("show"))closeModal()});
 $("#closeModal").onclick=closeModal;modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
 function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500)}
 function award(key,pts){if(!state.done.includes(key)){state.done.push(key);state.points+=pts;save();toast(`أحسنت! أضيفت ${ar(pts)} نقطة إلى إنجازك.`)}}
@@ -182,7 +187,7 @@ function renderCompanion(){
  document.querySelectorAll(".companion-choice").forEach(b=>b.classList.toggle("selected",b.dataset.avatar===state.avatar));
  const oldCharacter=document.querySelector(".character-person");if(oldCharacter)oldCharacter.textContent=state.avatar;
 }
-document.querySelectorAll(".companion-choice").forEach(b=>b.addEventListener("click",()=>{state.avatar=b.dataset.avatar;state.avatarName=b.dataset.name;save();renderCompanion();toast(`أصبح ${state.avatarName} رفيق رحلتك!`)}));
+document.querySelectorAll(".companion-choice").forEach(b=>b.addEventListener("click",()=>{state.avatar=b.dataset.avatar;state.avatarName=b.dataset.name;state.companionChosen=true;save();renderCompanion();toast(`أصبح ${state.avatarName} رفيق رحلتك!`)}));
 renderTreasureBag();renderCompanion();
 // تحديث الحقيبة مباشرة بعد أي زيارة لمحافظة أو إكمال محطة مستكشف.
 const originalRenderGovernorates=renderGovernorates;
@@ -258,7 +263,7 @@ initOmanGeographicMap();
  const choices=[
   {avatar:"🧭",name:"المستكشف",desc:"يعشق اكتشاف الأماكن",tag:"محب المغامرة"},
   {avatar:"🦅",name:"الصقر",desc:"يراقب التفاصيل من بعيد",tag:"عينٌ لا تفوتها التفاصيل"},
-  {avatar:"🤖",name:"الروبوت الذكي",desc:"يحل الألغاز والتحديات",tag:"خبير التحديات"}
+  {avatar:"🤖",name:"الروبوت",desc:"يحل الألغاز والتحديات",tag:"خبير التحديات"}
  ];
  const cards=choices.map((c,i)=>`<button type="button" class="welcome-companion-choice ${state.avatar===c.avatar?"selected":""}" data-welcome-avatar="${i}"><span class="welcome-companion-icon">${c.avatar}</span><b>${c.name}</b><small>${c.desc}</small><em>${c.tag}</em></button>`).join("");
  openModal(`<div class="companion-welcome" role="dialog" aria-modal="true" aria-labelledby="companionWelcomeTitle"><span class="welcome-sparkle" aria-hidden="true">✦</span><div class="eyebrow dark">أهلًا بك في عُمان تجمعنا</div><h2 id="companionWelcomeTitle">اختر رفيق رحلتك</h2><p>لكل رحلة حكاية، ومع رفيقك تبدأ المغامرة. من تختار ليكتشف عُمان معك؟</p><div class="welcome-companion-grid">${cards}</div><div class="welcome-footnote">يمكنك تغيير رفيقك لاحقًا من قسم «رفيق الرحلة».</div></div>`);
@@ -268,4 +273,5 @@ initOmanGeographicMap();
   state.avatar=choice.avatar;state.avatarName=choice.name;state.companionChosen=true;
   save();renderCompanion();closeModal();toast(`أصبح ${state.avatarName} رفيق رحلتك! هيا نكتشف عُمان.`);
  }));
+ const firstChoice=content.querySelector("[data-welcome-avatar]");if(firstChoice)firstChoice.focus();
 })();
