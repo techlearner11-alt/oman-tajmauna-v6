@@ -234,11 +234,3 @@ nav a:hover,.text-link:hover{color:#c62835}
 .certificate .certificate-credit{display:block;margin-top:22px;padding-top:10px;border-top:1px solid #d9c79e;color:#176447;font-weight:700;font-size:13px;}
 
 
-/* اعتماد اسم الإعداد كتذييل مستقل في الموقع */
-.footer-credit{
-  margin:10px 0 8px;
-  color:#d6b36a;
-  font-weight:700;
-  font-size:14px;
-  letter-spacing:.2px;
-}
