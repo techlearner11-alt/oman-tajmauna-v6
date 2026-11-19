@@ -65,8 +65,9 @@ $("#certificateBtn").onclick=()=>{
  openModal(`<div class="eyebrow dark">شهادتك الرقمية</div><h2>أضف اسمك إلى الشهادة</h2><p>يمكنك كتابة الاسم أو اللقب الذي ترغب في ظهوره على الشهادة. هذه البيانات تبقى على جهازك.</p><label for="certificateName">الاسم على الشهادة</label><input class="field" id="certificateName" maxlength="45" value="${(state.name||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}" placeholder="اكتب الاسم هنا"><button class="action" id="showCertificate">عرض الشهادة</button><div id="certificatePreview"></div>`);
  $("#showCertificate").onclick=()=>{state.name=$("#certificateName").value.trim();save();$("#certificatePreview").innerHTML=`<div class="certificate" id="certificate"><small>مدرسة أم أيمن للبنات (٥–١٠)</small><h2>شهادة مشاركة</h2><p>تُمنح هذه الشهادة تقديرًا للمشاركة في المبادرة الوطنية</p><h2>عُمان تجمعنا</h2><div class="recipient">${(state.name||"مشارك / مشاركة مبدع(ة)").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}</div><p>تقديرًا للمساهمة في رحلة المعرفة والانتماء والإبداع.</p><small>الإنجازات: ${ar(total)} من ١٩ · النقاط: ${ar(state.points)}</small><p>✦ عُمان تجمعنا دائمًا ✦</p></div><button class="action" id="printCertificate">طباعة / حفظ PDF</button>`;$("#printCertificate").onclick=()=>window.print();};
 };
-$("#menuBtn").onclick=()=>$("#nav").classList.toggle("open");
-$("#nav").querySelectorAll("a").forEach(a=>a.onclick=()=>$("#nav").classList.remove("open"));
+const menuButton=$("#menuBtn"),siteNav=$("#nav");
+menuButton.onclick=()=>{const isOpen=siteNav.classList.toggle("open");menuButton.setAttribute("aria-expanded",String(isOpen));menuButton.setAttribute("aria-label",isOpen?"إغلاق القائمة":"فتح القائمة")};
+siteNav.querySelectorAll("a").forEach(a=>a.onclick=()=>{siteNav.classList.remove("open");menuButton.setAttribute("aria-expanded","false");menuButton.setAttribute("aria-label","فتح القائمة")});
 renderProgress();
 // بوابات المحافظات — معلومات موجزة وتحدٍّ قصير لكل محافظة
 const governorates=[
@@ -266,7 +267,7 @@ initOmanGeographicMap();
   {avatar:"🤖",name:"الروبوت",desc:"يحل الألغاز والتحديات",tag:"خبير التحديات"}
  ];
  const cards=choices.map((c,i)=>`<button type="button" class="welcome-companion-choice ${state.avatar===c.avatar?"selected":""}" data-welcome-avatar="${i}"><span class="welcome-companion-icon">${c.avatar}</span><b>${c.name}</b><small>${c.desc}</small><em>${c.tag}</em></button>`).join("");
- openModal(`<div class="companion-welcome" role="dialog" aria-modal="true" aria-labelledby="companionWelcomeTitle"><span class="welcome-sparkle" aria-hidden="true">✦</span><div class="eyebrow dark">أهلًا بك في عُمان تجمعنا</div><h2 id="companionWelcomeTitle">اختر رفيق رحلتك</h2><p>لكل رحلة حكاية، ومع رفيقك تبدأ المغامرة. من تختار ليكتشف عُمان معك؟</p><div class="welcome-companion-grid">${cards}</div><div class="welcome-footnote">يمكنك تغيير رفيقك لاحقًا من قسم «رفيق الرحلة».</div></div>`);
+ openModal(`<div class="companion-welcome"><span class="welcome-sparkle" aria-hidden="true">✦</span><div class="eyebrow dark">أهلًا بك في عُمان تجمعنا</div><h2 id="companionWelcomeTitle">اختر رفيق رحلتك</h2><p>لكل رحلة حكاية، ومع رفيقك تبدأ المغامرة. من تختار ليكتشف عُمان معك؟</p><div class="welcome-companion-grid">${cards}</div><div class="welcome-footnote">يمكنك تغيير رفيقك لاحقًا من قسم «رفيق الرحلة».</div></div>`);
  content.querySelectorAll("[data-welcome-avatar]").forEach(button=>button.addEventListener("click",()=>{
   const choice=choices[Number(button.dataset.welcomeAvatar)];
   if(!choice)return;
