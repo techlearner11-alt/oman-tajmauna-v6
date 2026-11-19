@@ -249,7 +249,7 @@ initOmanGeographicMap();
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download="oman-tajmauna-progress-backup.json";
-  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   toast("تم تجهيز نسخة إنجازاتك الاحتياطية.");
  });
  restoreBtn.addEventListener("click",()=>fileInput.click());
@@ -268,8 +268,8 @@ initOmanGeographicMap();
     name:typeof p.name==="string"?p.name.slice(0,45):"",
     visitedGov:[...new Set((Array.isArray(p.visitedGov)?p.visitedGov:[]).filter(x=>Number.isInteger(x)&&x>=0&&x<11))],
     routeDone:[...new Set((Array.isArray(p.routeDone)?p.routeDone:[]).filter(x=>Number.isInteger(x)&&x>=0&&x<4))],
-    avatar:allowedAvatars[p.avatar]?p.avatar:"🧭",
-    avatarName:allowedAvatars[p.avatar]||"المستكشف",
+    avatar:Object.prototype.hasOwnProperty.call(allowedAvatars,p.avatar)?p.avatar:"🧭",
+    avatarName:Object.prototype.hasOwnProperty.call(allowedAvatars,p.avatar)?allowedAvatars[p.avatar]:"المستكشف",
     treasureCelebrated:!!p.treasureCelebrated
    };
    if(!confirm("ستُستبدل إنجازات هذا المتصفح بالنسخة الاحتياطية المختارة. هل تريد المتابعة؟"))return;
